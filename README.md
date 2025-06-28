@@ -10,3 +10,12 @@ Currently, two official plugins are available:
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+
+text to speech - https://www.npmjs.com/package/react-speech-kit
+
+
+for german words use - hugging face for AI model
+
+
+for react-speech-kit - npm i -S react-speech-kit --legacy-peer-deps  
