@@ -1,20 +1,38 @@
 import React from "react";
+import { useEffect, useState } from "react";
+import { useSpeechSynthesis } from "react-speech-kit";
 
 function VocabularyPractice() {
-  const word = "Haus";
+  const word = "verboten";
   const [inputValue, setInputValue] = React.useState("");
   const [score, setScore] = React.useState(0);
 
+  const { speak, voices } = useSpeechSynthesis();
+  const [selectedVoice, setSelectedVoice] = useState(null);
+
+  useEffect(() => {
+    const germanVoice = voices.find((voice) => voice.lang.startsWith("de-"));
+    setSelectedVoice(germanVoice || voices[0]); // Fallback to first available voice
+  }, [voices]);
+
   const checkAnswer = () => {
-    if (inputValue.toLowerCase() === 'house') {
-        console.log(inputValue);
-        setScore(score + 1);
-        setInputValue('');
-        console.log('Correct Answer');
+    if (inputValue.toLowerCase() === "house") {
+      console.log(inputValue);
+      setScore(score + 1);
+      setInputValue("");
+      console.log("Correct Answer");
     } else {
-        console.log('Try Again');
+      console.log("Try Again");
     }
-  }
+  };
+
+  const handleHearWord = () => {
+    if (selectedVoice) {
+      speak({ text: word, voice: selectedVoice });
+    } else {
+      speak({ text: word, lang: "de-DE" }); // Fallback without specific voice
+    }
+  };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -38,7 +56,10 @@ function VocabularyPractice() {
         >
           Submit
         </button>
-        <button className="px-4 py-2 rounded bg-green-500 text-white">
+        <button
+          className="px-4 py-2 rounded bg-green-500 text-white"
+          onClick={handleHearWord}
+        >
           Hear Word
         </button>
         <p className="text-right">
