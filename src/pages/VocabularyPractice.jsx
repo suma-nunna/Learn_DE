@@ -2,6 +2,9 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useSpeechSynthesis } from "react-speech-kit";
 import axios from "axios";
+import InputField from "../components/InputField";
+import ScoreDisplay from "../components/ScoreDisplay";
+import DisplayButtons from "../components/DisplayButtons";
 
 function VocabularyPractice() {
   const [germanWords, setGermanWords] = useState([]);
@@ -19,7 +22,7 @@ function VocabularyPractice() {
         setGermanWords(res.data.a1);
         let list = [...res.data.a1];
         if (list.length > 0) {
-          setWord(list[Math.floor(Math.random() * list.length)]);
+          setRandomGermanWord(list);
         }
       } catch (error) {
         console.log(error);
@@ -59,13 +62,13 @@ function VocabularyPractice() {
   }, [voices]);
 
   const checkAnswer = () => {
-    if (inputValue.toLowerCase() === word.traslation) {
+    if (inputValue.toLowerCase() === word.traslation.toLowerCase()) {
       console.log(inputValue);
       setScore(score + 1);
       setInputValue("");
 
       if (germanWords.length > 0) {
-        setWord(germanWords[Math.floor(Math.random() * germanWords.length)]);
+        setRandomGermanWord(germanWords);
         console.log(word);
       }
 
@@ -73,6 +76,10 @@ function VocabularyPractice() {
     } else {
       console.log("Try Again");
     }
+  };
+
+  const setRandomGermanWord = (word) => {
+    setWord(word[Math.floor(Math.random() * word.length)]);
   };
 
   const handleHearWord = () => {
@@ -91,29 +98,23 @@ function VocabularyPractice() {
       <p className="text-left text-lg mb-2">
         Traslate: <b> {word.germanWord}</b>
       </p>
-      <input
-        type="text"
+      <InputField
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
-        placeholder="Enter English traslation."
-        className="w-full p-2 border rounded mb-4"
       />
       <div className="flex space-x-4 mt-4">
-        <button
-          className="px-4 py-2 rounded bg-blue-500 text-white"
+        <DisplayButtons
+          text="Check Answer"
           onClick={checkAnswer}
-        >
-          Check Answer
-        </button>
-        <button
-          className="px-4 py-2 rounded bg-green-500 text-white"
+          color="blue"
+        />
+        <DisplayButtons
+          text="Hear Word"
           onClick={handleHearWord}
-        >
-          Hear Word
-        </button>
-        <p className="text-right">
-          Score: <b>{score}</b>
-        </p>
+          color="green"
+        />
+
+        <ScoreDisplay score={score} />
       </div>
     </div>
   );
